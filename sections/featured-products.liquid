@@ -1,0 +1,237 @@
+{{ 'featured-products.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'featured-product-form.js' | asset_url }}" defer="defer"></script>
+<link href="https://fonts.cdnfonts.com/css/arial-2" rel="stylesheet">
+
+               
+<h1 class="featured-prodcuts__title">{{ section.settings.title }}</h1>
+
+{% unless template == 'cart' %}
+  <div class="featured-products">
+  
+    {% for product in collections[section.settings.selected_collection].products %}
+  
+      {% comment %} Check if the product is in the cart {% endcomment %}
+      {% assign product_not_in_cart = true %}
+      {% for item in cart.items %}
+        {%if  item.product == product %}
+          {% assign product_not_in_cart = false %}
+        {% endif %}
+      {% endfor %}
+  
+      {% if product_not_in_cart and product.available %}
+  
+        <div class="featured-products__item" id="featured-{{ product.selected_or_first_available_variant.id }}">
+          <img 
+            class="featured-product__img" 
+            id="product-img-{{ product.selected_or_first_available_variant.id }}" 
+            alt="{{ product.featured_image.alt | escape }}"
+            
+            {% if product.featured_image %}
+              src="{{ product.featured_image | product_img_url: 'medium' }}" 
+            {% else %}
+              src="https://cdn.shopify.com/s/files/1/0593/6205/0199/files/no-image.png?v=1689291959" 
+            {% endif %} 
+          >
+          
+          <h3 class="featured-product__title">{{ product.title }}</h3>
+  
+          {% if product.variants.size > 1 %}
+            <div class="featured-product__helper-block">
+              <select name="id" id="variants-{{ product.selected_or_first_available_variant.id }}" class="featured-product__select" form="product-form-{{ product.selected_or_first_available_variant.id }}">
+                {%- for variant in product.variants -%} 
+  
+                  {% if variant.available %}
+                  
+                    <option
+                      {% if variant == product.selected_or_first_available_variant %}
+                        selected="selected"
+                      {% endif %}
+                      {% if variant.available == false %}
+                        disabled
+                      {% endif %}
+                      value="{{ variant.price | money }}"
+                      product-id="{{ variant.id }}"
+                      data-per="{{ discount_percentage }}"
+                      product-variant-img="{{ variant.featured_image | product_img_url: 'medium' }}"
+                      variant-compare-at-price="{{ variant.compare_at_price }}"
+                      variant-price="{{ variant.price }}"
+                    >
+                      {{ variant.title }} 
+                      {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                    </option>
+                  {% endif %}
+                {%- endfor -%}
+              </select>
+
+              {% comment %} discount percentage calc for product with only one variant {% endcomment %}
+              {% assign variant_price = product.selected_or_first_available_variant.price | money_without_currency | remove: ',' | plus: 0 %}
+              {% assign compare_price = product.selected_or_first_available_variant.compare_at_price | money_without_currency | remove: ',' | plus: 0 %}
+              
+              {% if compare_price > variant_price %}
+  
+                {% capture discount_percentage %}
+                  {{ compare_price | minus: variant_price | times: 100 | divided_by: compare_price | round }}
+                {% endcapture %}
+  
+                {% assign discount_percentage = discount_percentage | remove: ".0" %}
+  
+              {% endif %}
+
+              <p product="{{ product.selected_or_first_available_variant.title }}" class="{% if variant_price > compare_price %}hidden{% endif %} featured-product__discount-badge featured-variant-badge-{{ product.selected_or_first_available_variant.id }}">-{{ discount_percentage | strip }}%</p>
+              {% style %}
+                .featured-variant-badge-{{ product.selected_or_first_available_variant.id }} {
+                  margin: 10px;
+                }
+              {% endstyle%}
+       
+            </div>
+          {% else %}
+  
+            {% comment %} discount percentage calc for product with only one variant {% endcomment %}
+            {% if product.compare_at_price > product.price %}
+  
+              {% capture discount_percentage %}
+                {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round }}
+              {% endcapture %}
+  
+              {% assign discount_percentage = discount_percentage | remove: ".0" %}
+  
+              <p class="featured-product__discount-badge">-{{discount_percentage | strip }}%</p>
+            {% endif %}
+  
+          {% endif %}
+  
+          <featured-product-form class="product-form">
+            {% form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+                <input type="hidden" id="form-product-data-{{ product.selected_or_first_available_variant.id }}" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="featured-submit-btn" >
+                  <span class="form-btn-text" id="AddToCartText-{{ product.selected_or_first_available_variant.id }}">{{ 'products.product.add_to_cart' | t }} -&nbsp;</span>
+                  <span class="form-btn-text" id="AddToCartPrice-{{ product.selected_or_first_available_variant.id }}"> {{ product.selected_or_first_available_variant.price | money }}</span>
+                </button>
+            {% endform %}
+          </featured-product-form>
+  
+          <script>
+  
+            const selectElement{{ product.selected_or_first_available_variant.id }} = document.getElementById('variants-{{ product.selected_or_first_available_variant.id }}');
+            const itemPriceElement{{ product.selected_or_first_available_variant.id }} = document.getElementById('AddToCartPrice-{{ product.selected_or_first_available_variant.id }}');
+            
+            selectElement{{ product.selected_or_first_available_variant.id }}?.addEventListener('change', function() {
+              //change price
+              const selectedOption = selectElement{{ product.selected_or_first_available_variant.id }}.options[selectElement{{ product.selected_or_first_available_variant.id }}.selectedIndex];
+              itemPriceElement{{ product.selected_or_first_available_variant.id }}.textContent = selectedOption.value;
+              
+              //change product id for add to cart form
+              const formProductId = document.getElementById('form-product-data-{{ product.selected_or_first_available_variant.id }}');
+              formProductId.value = selectedOption.getAttribute('product-id');
+              
+              //change product image
+              const productImgSrc = document.getElementById('product-img-{{ product.selected_or_first_available_variant.id }}');
+              if(selectedOption.getAttribute('product-variant-img')) {
+                productImgSrc.src = selectedOption.getAttribute('product-variant-img');
+              } else {
+                productImgSrc.src = 'https://cdn.shopify.com/s/files/1/0593/6205/0199/files/no-image.png?v=1689291959';
+              }
+  
+              
+              //change discount badge
+              const discountBadge = document.querySelector('.featured-variant-badge-{{ product.selected_or_first_available_variant.id }}');
+              console.log(discountBadge)
+              const variantCompareAtPrice = +selectedOption.getAttribute('variant-compare-at-price');
+              const variantPrice = +selectedOption.getAttribute('variant-price');
+              if (variantCompareAtPrice > variantPrice) {
+                const discountPercentage = Math.round((variantCompareAtPrice - variantPrice) * 100 / variantCompareAtPrice); 
+                discountBadge.textContent = `-${discountPercentage}%`;
+                discountBadge.classList.remove('hidden');
+                console.log(discountPercentage);
+              } else {
+                const discountBadge = document.querySelector('.featured-variant-badge-{{ product.selected_or_first_available_variant.id }}');
+                discountBadge.classList.add('hidden');
+              }
+            });
+          </script>  
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endunless %}
+
+{% if template == 'cart' %}
+  <div class="recommended-products">
+    {% for block in section.blocks %}
+      {% if block.type == 'product-block' %}
+
+        {% assign product = block.settings.product %}
+        {% comment %} Check if the product is in the cart {% endcomment %}
+        {% assign product_not_in_cart = true %}
+        {% for item in cart.items %}
+          {%if  item.product == product %}
+            {% assign product_not_in_cart = false %}
+          {% endif %}
+        {% endfor %}
+
+        {% if product != nil and product_not_in_cart %}
+          <a class="recommended-product__link" href="{{ product.url }}">
+            <div class="recommended-product">
+              <img 
+                class="recommended-product__img" 
+                {% if product.featured_image %}
+                  src="{{ product.featured_image | product_img_url: 'medium' }}" 
+                {% else %}
+                  src="https://cdn.shopify.com/s/files/1/0593/6205/0199/files/no-image.png?v=1689291959" 
+                {% endif %}  
+                alt="{{ product.featured_image.alt | escape }}"
+              >
+              <p class="recommended-product__title">{{ product.title }}</p>
+              <p class="recommended-product__price">{{ product.price | money }}</p>
+            </div>
+          </a>
+        {% endif %}
+
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "t:sections.featured-products.name",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "collection",
+        "label": "t:sections.featured-products.settings.collection.label",
+        "id": "selected_collection"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.featured-products.settings.title.label",
+        "default": "t:sections.featured-products.settings.title.default"
+      }
+    ],
+    "blocks": [
+    {
+      "type": "product-block",
+      "name": "t:sections.featured-products.blocks.name",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.featured-products.blocks.settings.label"
+        }
+      ]
+    }
+  ],
+    "presets": [
+      {
+        "name": "t:sections.featured-products.presets.name",
+        "category": "Custom",
+        "settings": {
+          "selected_collection": "all",
+          "title": "t:sections.featured-products.presets.settings.title"
+        }
+      }
+    ]
+  }
+{% endschema %}

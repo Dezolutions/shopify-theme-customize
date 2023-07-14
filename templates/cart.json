@@ -27,11 +27,19 @@
       }
     },
     "featured-products": {
-      "type": "featured-collection",
+      "type": "featured-products",
       "settings": {
-        "collection": "all",
-        "image_ratio": "square"
-      }
+        "title": "Recommended Products"
+      },
+      "blocks": {
+        "product-block":{
+          "type": "product-block",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "product-block"
+      ]
     }
   },
   "order": [
