@@ -159,13 +159,6 @@
         "show_vendor": false,
         "show_rating": false
       }
-    },
-    "05f5ce9f-0ae6-4ce4-9c32-c58868ec3247": {
-      "type": "featured-products",
-      "settings": {
-        "selected_collection": "all",
-        "title": "t:sections.featured-products.presets.settings.title"
-      }
     }
   },
   "order": [
@@ -173,7 +166,6 @@
     "collage",
     "image_banner",
     "16375351139e294723",
-    "671a5172-ae5a-4560-82e4-e4c91e4bdaaf",
-    "05f5ce9f-0ae6-4ce4-9c32-c58868ec3247"
+    "671a5172-ae5a-4560-82e4-e4c91e4bdaaf"
   ]
 }
