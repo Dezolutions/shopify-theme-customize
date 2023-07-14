@@ -42,11 +42,25 @@
           "settings": {
             "product": "beach-balls"
           }
+        },
+        "362b501f-9c4a-4f86-9444-5fe301746efc": {
+          "type": "product-block",
+          "settings": {
+            "product": "ball-mikasa-mva300w"
+          }
+        },
+        "d27662b1-6f90-4920-9741-dcf61ed81df5": {
+          "type": "product-block",
+          "settings": {
+            "product": "sneakers-asics-1"
+          }
         }
       },
       "block_order": [
         "product-block",
-        "97241d79-07b0-414c-9e54-8d39b796d761"
+        "97241d79-07b0-414c-9e54-8d39b796d761",
+        "362b501f-9c4a-4f86-9444-5fe301746efc",
+        "d27662b1-6f90-4920-9741-dcf61ed81df5"
       ],
       "settings": {
         "selected_collection": "",
