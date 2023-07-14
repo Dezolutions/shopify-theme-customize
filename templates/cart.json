@@ -3,6 +3,7 @@
     "cart-items": {
       "type": "main-cart-items",
       "settings": {
+        "show_vendor": false
       }
     },
     "cart-footer": {
@@ -24,22 +25,33 @@
         "buttons"
       ],
       "settings": {
+        "show_cart_note": false
       }
     },
     "featured-products": {
       "type": "featured-products",
-      "settings": {
-        "title": "Recommended Products"
-      },
       "blocks": {
-        "product-block":{
+        "product-block": {
           "type": "product-block",
-          "settings": {}
+          "settings": {
+            "product": "ball-mikasa-mva300l"
+          }
+        },
+        "97241d79-07b0-414c-9e54-8d39b796d761": {
+          "type": "product-block",
+          "settings": {
+            "product": "beach-balls"
+          }
         }
       },
       "block_order": [
-        "product-block"
-      ]
+        "product-block",
+        "97241d79-07b0-414c-9e54-8d39b796d761"
+      ],
+      "settings": {
+        "selected_collection": "",
+        "title": "Recommended Products"
+      }
     }
   },
   "order": [
