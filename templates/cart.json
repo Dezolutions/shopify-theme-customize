@@ -30,52 +30,6 @@
     },
     "featured-products": {
       "type": "featured-products",
-      "blocks": {
-        "product-block": {
-          "type": "product-block",
-          "settings": {
-            "product": "ball-mikasa-mva300l"
-          }
-        },
-        "97241d79-07b0-414c-9e54-8d39b796d761": {
-          "type": "product-block",
-          "settings": {
-            "product": "beach-balls"
-          }
-        },
-        "362b501f-9c4a-4f86-9444-5fe301746efc": {
-          "type": "product-block",
-          "settings": {
-            "product": "ball-mikasa-mva300w"
-          }
-        },
-        "d27662b1-6f90-4920-9741-dcf61ed81df5": {
-          "type": "product-block",
-          "settings": {
-            "product": "sneakers-asics-1"
-          }
-        },
-        "97021319-95e2-43a3-897b-f5b42b0ca767": {
-          "type": "product-block",
-          "settings": {
-            "product": "top-shorts"
-          }
-        },
-        "165574c3-7fe1-4c7c-a6af-16da6112fb91": {
-          "type": "product-block",
-          "settings": {
-            "product": "product-5"
-          }
-        }
-      },
-      "block_order": [
-        "product-block",
-        "97241d79-07b0-414c-9e54-8d39b796d761",
-        "362b501f-9c4a-4f86-9444-5fe301746efc",
-        "d27662b1-6f90-4920-9741-dcf61ed81df5",
-        "97021319-95e2-43a3-897b-f5b42b0ca767",
-        "165574c3-7fe1-4c7c-a6af-16da6112fb91"
-      ],
       "settings": {
         "selected_collection": "",
         "title": "Recommended Products"
