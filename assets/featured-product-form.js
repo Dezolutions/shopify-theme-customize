@@ -16,7 +16,7 @@ if (!customElements.get('featured-product-form')) {
 
       submitButton.setAttribute('disabled', true);
       submitButton.classList.add('loading');
-
+      console.log(this.form)
       const body = JSON.stringify({
         ...JSON.parse(serializeForm(this.form)),
         sections: this.cartNotification.getSectionsToRender().map((section) => section.id),
@@ -34,9 +34,10 @@ if (!customElements.get('featured-product-form')) {
         .finally(() => {
           submitButton.classList.remove('loading');
           submitButton.removeAttribute('disabled');
-          
+
           //In case you want to hide the product after adding to cart
-          // submitButton.closest('.featured-products__item').classList.add('hidden') 
+          submitButton.closest('.featured-products__item').classList.add('hidden');
+          location.reload();
         });
     }
   });

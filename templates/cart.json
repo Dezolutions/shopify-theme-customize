@@ -29,7 +29,8 @@
     "featured-products": {
       "type": "featured-products",
       "settings": {
-        "title": "Recommended Products"
+        "title": "Featured Products",
+        "selected_collection": "all"
       },
       "blocks": {
         "product-block":{
