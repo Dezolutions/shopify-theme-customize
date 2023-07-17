@@ -30,6 +30,38 @@
     },
     "featured-products": {
       "type": "featured-products",
+      "blocks": {
+        "a0b70346-4edb-4d4d-a63a-dfd601aa295c": {
+          "type": "product-block",
+          "settings": {
+            "product": "ball-mikasa-mva300l"
+          }
+        },
+        "d24c1a6a-6f1c-4aa8-8185-c2622c4b0179": {
+          "type": "product-block",
+          "settings": {
+            "product": "ball-mikasa-mva300w"
+          }
+        },
+        "b0e572e7-9cd7-47f7-b0e2-bcc591b70dd4": {
+          "type": "product-block",
+          "settings": {
+            "product": "sneakers-asics-3"
+          }
+        },
+        "6f77159f-5ff3-4564-8a5d-7e5648ac4a24": {
+          "type": "product-block",
+          "settings": {
+            "product": "top-shorts"
+          }
+        }
+      },
+      "block_order": [
+        "a0b70346-4edb-4d4d-a63a-dfd601aa295c",
+        "d24c1a6a-6f1c-4aa8-8185-c2622c4b0179",
+        "b0e572e7-9cd7-47f7-b0e2-bcc591b70dd4",
+        "6f77159f-5ff3-4564-8a5d-7e5648ac4a24"
+      ],
       "settings": {
         "selected_collection": "",
         "title": "Recommended Products"
