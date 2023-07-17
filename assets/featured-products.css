@@ -10,7 +10,6 @@
 }
 
 .featured-products__item {
-  border: 1px solid rgb(var(--featured-products-grey-rgb), 0.2);
   justify-self: center;
   align-self: center;
   text-align: center;
