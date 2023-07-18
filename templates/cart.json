@@ -3,6 +3,7 @@
     "cart-items": {
       "type": "main-cart-items",
       "settings": {
+        "show_vendor": false
       }
     },
     "cart-footer": {
@@ -24,14 +25,24 @@
         "buttons"
       ],
       "settings": {
+        "show_cart_note": false
       }
     },
     "featured-products": {
-      "type": "featured-collection",
+      "type": "featured-products",
       "settings": {
-        "collection": "all",
-        "image_ratio": "square"
-      }
+        "title": "Featured Products",
+        "selected_collection": "all"
+      },
+      "blocks": {
+        "product-block": {
+          "type": "product-block",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "product-block"
+      ]
     }
   },
   "order": [

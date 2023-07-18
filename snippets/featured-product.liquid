@@ -1,0 +1,132 @@
+{% comment %} Check if the product is in the cart {% endcomment %}
+{% assign product_in_cart = false %}
+{% for item in cart.items %}
+  {%if  item.product == featured_product %}
+    {% assign product_in_cart = true %}
+  {% endif %}
+{% endfor %}
+
+<div class="featured-products__item {% if product_in_cart %} hidden {% endif %}" id="featured-{{ featured_product.selected_or_first_available_variant.id }}">
+  <img 
+    class="featured-product__img" 
+    id="product-img-{{ featured_product.selected_or_first_available_variant.id }}" 
+    alt="{{ featured_product.featured_image.alt | escape }}"
+    
+    {% if featured_product.featured_image %}
+      src="{{ featured_product.featured_image | product_img_url: 'medium' }}" 
+    {% else %}
+      src="https://cdn.shopify.com/s/files/1/0593/6205/0199/files/no-image.png?v=1689291959" 
+    {% endif %} 
+  >
+  
+  <h3 class="featured-product__title">{{ featured_product.title }}</h3>
+
+  {% if featured_product.variants.size > 1 %}
+    <div class="featured-product__helper-block">
+
+      <select name="options" id="variants-{{ featured_product.selected_or_first_available_variant.id }}" class="featured-product__select">
+        {%- for variant in featured_product.variants -%} 
+          {% if variant.available %}
+          
+            <option
+              {% if variant == featured_product.selected_or_first_available_variant %}
+                selected="selected"
+              {% endif %}
+              {% if variant.available == false %}
+                disabled
+              {% endif %}
+              value="{{ variant.price | money }}"
+              product-id="{{ variant.id }}"
+              data-per="{{ discount_percentage }}"
+              product-variant-img="{{ variant.featured_image | product_img_url: 'medium' }}"
+              variant-compare-at-price="{{ variant.compare_at_price }}"
+              variant-price="{{ variant.price }}"
+            >
+              {{ variant.title }} 
+              {%- if variant.available == false %} - {{ 'products.featured_product.sold_out' | t }}{% endif %}
+            </option>
+          {% endif %}
+        {%- endfor -%}
+      </select>
+
+      {% comment %} discount percentage calc for product with only one variant {% endcomment %}
+      {% assign variant_price = featured_product.selected_or_first_available_variant.price | money_without_currency | remove: ',' | plus: 0 %}
+      {% assign compare_price = featured_product.selected_or_first_available_variant.compare_at_price | money_without_currency | remove: ',' | plus: 0 %}
+      
+      {% if compare_price > variant_price %}
+        {% capture discount_percentage %}
+          {{ compare_price | minus: variant_price | times: 100 | divided_by: compare_price | round }}
+        {% endcapture %}
+        {% assign discount_percentage = discount_percentage | remove: ".0" %}
+      {% endif %}
+
+      <p product="{{ featured_product.selected_or_first_available_variant.title }}" class="{% if variant_price > compare_price %}hidden{% endif %} featured-product__discount-badge featured-variant-badge-{{ featured_product.selected_or_first_available_variant.id }}">-{{ discount_percentage | strip }}%</p>
+      {% style %}
+        .featured-variant-badge-{{ featured_product.selected_or_first_available_variant.id }} {
+          margin: 0 10px;
+        }
+      {% endstyle%}
+
+    </div>
+  {% else %}
+
+    {% comment %} discount percentage calc for product with only one variant {% endcomment %}
+    {% if featured_product.compare_at_price > featured_product.price %}
+      {% capture discount_percentage %}
+        {{ featured_product.compare_at_price | minus: featured_product.price | times: 100 | divided_by: featured_product.compare_at_price | round }}
+      {% endcapture %}
+      {% assign discount_percentage = discount_percentage | remove: ".0" %}
+      <p class="featured-product__discount-badge">-{{discount_percentage | strip }}%</p>
+    {% endif %}
+
+  {% endif %}
+
+  {% assign product_form_id = 'form-' | append: featured_product.id %} 
+
+  <featured-product-form class="product-form">
+    {% form 'product', featured_product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+        <input type="hidden" id="form-product-data-{{ featured_product.selected_or_first_available_variant.id }}" name="id" value="{{ featured_product.selected_or_first_available_variant.id }}">
+        <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="featured-submit-btn" >
+          <span class="form-btn-text" id="AddToCartText-{{ featured_product.selected_or_first_available_variant.id }}">{{ 'products.product.add_to_cart' | t }} -&nbsp;</span>
+          <span class="form-btn-text" id="AddToCartPrice-{{ featured_product.selected_or_first_available_variant.id }}"> {{ featured_product.selected_or_first_available_variant.price | money }}</span>
+        </button>
+    {% endform %}
+  </featured-product-form>
+
+  <script>
+    const selectElement{{ featured_product.selected_or_first_available_variant.id }} = document.getElementById('variants-{{ featured_product.selected_or_first_available_variant.id }}');
+    const itemPriceElement{{ featured_product.selected_or_first_available_variant.id }} = document.getElementById('AddToCartPrice-{{ featured_product.selected_or_first_available_variant.id }}');
+    
+    selectElement{{ featured_product.selected_or_first_available_variant.id }}?.addEventListener('change', function() {
+      //change price
+      const selectedOption = selectElement{{ featured_product.selected_or_first_available_variant.id }}.options[selectElement{{ featured_product.selected_or_first_available_variant.id }}.selectedIndex];
+      itemPriceElement{{ featured_product.selected_or_first_available_variant.id }}.textContent = selectedOption.value;
+      
+      //change product id for add to cart form
+      const formProductId = document.getElementById('form-product-data-{{ featured_product.selected_or_first_available_variant.id }}');
+      formProductId.value = selectedOption.getAttribute('product-id');
+      
+      //change product image
+      const productImgSrc = document.getElementById('product-img-{{ featured_product.selected_or_first_available_variant.id }}');
+      if(selectedOption.getAttribute('product-variant-img')) {
+        productImgSrc.src = selectedOption.getAttribute('product-variant-img');
+      } else {
+        productImgSrc.src = 'https://cdn.shopify.com/s/files/1/0593/6205/0199/files/no-image.png?v=1689291959';
+      }
+      
+      //change discount badge
+      const discountBadge = document.querySelector('.featured-variant-badge-{{ featured_product.selected_or_first_available_variant.id }}')
+      const variantCompareAtPrice = +selectedOption.getAttribute('variant-compare-at-price');
+      const variantPrice = +selectedOption.getAttribute('variant-price');
+      if (variantCompareAtPrice > variantPrice) {
+        const discountPercentage = Math.round((variantCompareAtPrice - variantPrice) * 100 / variantCompareAtPrice); 
+        discountBadge.textContent = `-${discountPercentage}%`;
+        discountBadge.classList.remove('hidden');
+
+      } else {
+        const discountBadge = document.querySelector('.featured-variant-badge-{{ featured_product.selected_or_first_available_variant.id }}');
+        discountBadge.classList.add('hidden');
+      }
+    });
+  </script>  
+</div>
