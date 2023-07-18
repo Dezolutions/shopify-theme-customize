@@ -39,7 +39,8 @@
   font-weight: 700;
   font-size: 14px;
   padding: 10px;
-  margin: 12px 0;
+  height: 40px;
+  margin:  0;
   border-radius: 100px;
   justify-self: end;
   background-position: right 10px center;
@@ -102,6 +103,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px 0;
 }
 
 /* STYLES FOR SPECIAL CASES */

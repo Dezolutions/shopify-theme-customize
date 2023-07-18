@@ -16,7 +16,7 @@ if (!customElements.get('featured-product-form')) {
 
       submitButton.setAttribute('disabled', true);
       submitButton.classList.add('loading');
-      console.log(this.form)
+
       const body = JSON.stringify({
         ...JSON.parse(serializeForm(this.form)),
         sections: this.cartNotification.getSectionsToRender().map((section) => section.id),
@@ -37,7 +37,32 @@ if (!customElements.get('featured-product-form')) {
 
           //In case you want to hide the product after adding to cart
           submitButton.closest('.featured-products__item').classList.add('hidden');
-          location.reload();
+
+          const cartItemsId = document.getElementById('main-cart-items').dataset.id;
+          const cartFooterId = document.getElementById('main-cart-footer').dataset.id;
+          const cartItemsBlock = document.querySelector('cart-items');
+          const cartFooterBlock = document.getElementById('main-cart-footer');
+
+          fetch(`https://volleyball-store-123.myshopify.com/cart?sections=${cartItemsId},${cartFooterId}`)
+            .then((response) => response.json())
+            .then((htmlString) => {
+              const parser = new DOMParser();
+
+              const newCartItems = parser
+                .parseFromString(htmlString[`${cartItemsId}`], 'text/html')
+                .querySelector('cart-items')
+                .innerHTML;
+
+              const newCartFooter = parser
+                .parseFromString(htmlString[`${cartFooterId}`], 'text/html')
+                .querySelector('#main-cart-footer')
+                .innerHTML;
+
+              cartItemsBlock.classList.remove('is-empty')
+              cartFooterBlock.classList.remove('is-empty')
+              cartItemsBlock.innerHTML = newCartItems;
+              cartFooterBlock.innerHTML= newCartFooter;
+            });
         });
     }
   });

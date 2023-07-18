@@ -9,34 +9,19 @@
   
     {% for product in collections[section.settings.selected_collection].products %}
   
-      {% comment %} Check if the product is in the cart {% endcomment %}
-      {% assign product_not_in_cart = true %}
-      {% for item in cart.items %}
-        {%if  item.product == product %}
-          {% assign product_not_in_cart = false %}
-        {% endif %}
-      {% endfor %}
-  
-      {% if product_not_in_cart and product.available %}
-          {% render 'featured-product', featured_product: product %}
-        
+      {% if product.available %}
+        {% render 'featured-product', featured_product: product %} 
       {% endif %}
+      
     {% endfor %}
-    
+
     {% for block in section.blocks %}
       {% if block.type == 'product-block' %}
 
-        {% assign product = block.settings.product %}
-        {% comment %} Check if the product is in the cart {% endcomment %}
-        {% assign product_not_in_cart = true %}
-        {% for item in cart.items %}
-          {%if  item.product == product %}
-            {% assign product_not_in_cart = false %}
-          {% endif %}
-        {% endfor %}
+        {% assign product_block = block.settings.product %}
 
-        {% if product != nil and product_not_in_cart %}
-          {% render 'featured-product', featured_product: product %}
+        {% if product_block != nil and product_block.available %}
+          {% render 'featured-product', featured_product: product_block %}
         {% endif %}
 
       {% endif %}
