@@ -8,8 +8,11 @@
   <div class="featured-products">
   
     {% for product in collections[section.settings.selected_collection].products %}
-       {{ product.compare_at_price }}
-      {{ product.price }}
+       {% if product.price > product.compare_at_price %}
+         {{ product.compare_at_price }}
+       {% else %}
+         {{ product.price }}
+       {% endif %}
       {% if product.available %}
         {% render 'featured-product', featured_product: product %} 
       {% endif %}
