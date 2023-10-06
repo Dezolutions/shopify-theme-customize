@@ -8,7 +8,7 @@
   <div class="featured-products">
   
     {% for product in collections[section.settings.selected_collection].products %}
-       {% if product.price > product.compare_at_price %}
+       {% if product.price < product.compare_at_price %}
          {{ product.compare_at_price }}
        {% else %}
          {{ product.price }}
