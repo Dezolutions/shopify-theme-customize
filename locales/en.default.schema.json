@@ -212,6 +212,29 @@
     }
   },
   "sections": {
+    "featured-products": {
+      "name": "Featured products",
+      "settings": {
+        "title": {
+          "label": "Title"
+        },
+        "collection": {
+          "label": "Selected Collection"
+        }
+      },
+      "blocks": {
+        "name": "Product block",
+        "settings": {
+          "label": "Product"
+        }
+      },
+      "presets": {
+        "name": "Featured products",
+        "settings": {
+          "title": "Featured products"
+        }
+      }
+    },
     "announcement-bar": {
       "name": "Announcement bar",
       "blocks": {

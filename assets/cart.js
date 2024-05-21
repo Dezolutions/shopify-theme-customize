@@ -3,6 +3,13 @@ class CartRemoveButton extends HTMLElement {
     super();
     this.addEventListener('click', (event) => {
       event.preventDefault();
+      const productVariantId = this
+        .closest('.cart-item')
+        .querySelector('.cart-item__details')
+        .querySelector('button[data-product_id]')
+        .dataset.variant_id;
+
+      document.getElementById(`featured-${productVariantId}`)?.classList.remove('hidden');
       this.closest('cart-items').updateQuantity(this.dataset.index, 0);
     });
   }
@@ -64,7 +71,7 @@ class CartItems extends HTMLElement {
       sections: this.getSectionsToRender().map((section) => section.section),
       sections_url: window.location.pathname
     });
-
+    
     fetch(`${routes.cart_change_url}`, {...fetchConfig(), ...{ body }})
       .then((response) => {
         return response.text();

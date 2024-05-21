@@ -31,7 +31,7 @@
     {% render 'meta-tags' %}
 
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    {% include 'globo.filter.script' %}{{ content_for_header }}
+    {{ content_for_header }}
 
   <!-- OrderLogic checkout restrictions ========================================= -->
   {% include 'order-logic' %}
@@ -72,6 +72,15 @@
         --gradient-base-background-2: {% if settings.gradient_background_2 != blank %}{{ settings.gradient_background_2 }}{% else %}{{ settings.colors_background_2 }}{% endif %};
         --gradient-base-accent-1: {% if settings.gradient_accent_1 != blank %}{{ settings.gradient_accent_1 }}{% else %}{{ settings.colors_accent_1 }}{% endif %};
         --gradient-base-accent-2: {% if settings.gradient_accent_2 != blank %}{{ settings.gradient_accent_2 }}{% else %}{{ settings.colors_accent_2 }}{% endif %};
+
+        {% comment %} Featured Products variables {% endcomment %}
+        --featured-products-blue: #464B90;
+        --featured-products-blue-rgb: 70, 75, 144;
+        --featured-products-grey: #656874;
+        --featured-products-grey-rgb: 101, 104, 116;
+        --featured-products-red: #EB5757;
+        --featured-products-red-rgb: 235, 87, 87;
+        {% comment %} Featured Products variables {% endcomment %}
 
         --page-width: {{ settings.page_width | divided_by: 10 }}rem;
       }
@@ -123,9 +132,6 @@
     {%- endif -%} 
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-  {{ 'zify-products-slider.css' | asset_url | stylesheet_tag }}
-<script type="text/javascript"> var zify_product_json = "{{ 'zify-products-slider.json' | asset_url }}";</script>
-{{ 'zify_products_slider.js' | asset_url | script_tag }}
 <script type="text/javascript">jQuery(document).ready(function(){Shopify.Products.recordRecentlyViewed( );});</script>
 
  {% render 'giftship' %} 
@@ -186,7 +192,6 @@
 
 
 	{% render 'giftwrap-by-wrapped' %}
-	{% include 'globo.filter.action' %}
 {% render 'mws_apo_init' %}
 {% include 'wholesale-product-form' %}</body>
 

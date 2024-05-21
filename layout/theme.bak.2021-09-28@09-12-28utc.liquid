@@ -30,7 +30,7 @@
     {% render 'meta-tags' %}
 
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    {% include 'globo.filter.script' %}{{ content_for_header }}
+    {{ content_for_header }}
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
@@ -118,9 +118,7 @@
     {%- endif -%} 
 
     <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-  {{ 'zify-products-slider.css' | asset_url | stylesheet_tag }}
-<script type="text/javascript"> var zify_product_json = "{{ 'zify-products-slider.json' | asset_url }}";</script>
-{{ 'zify_products_slider.js' | asset_url | script_tag }}
+
 <script type="text/javascript">jQuery(document).ready(function(){Shopify.Products.recordRecentlyViewed( );});</script>
 
  {% render 'giftship' %} 
@@ -172,6 +170,5 @@
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
   <script src='{{ 'eproslider.js' | asset_url }}' async='async'></script>
-{% include 'globo.filter.action' %}
 	</body>
 </html>
